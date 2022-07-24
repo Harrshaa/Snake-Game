@@ -7,12 +7,7 @@ import {
 
 import './Board.css';
 
-/**
- * TODO: add a more elegant UX for before a game starts and after a game ends.
- * A game probably shouldn't start until the user presses an arrow key, and
- * once a game is over, the board state should likely freeze until the user
- * intentionally restarts the game.
- */
+
 
 class LinkedListNode {
   constructor(value) {
@@ -74,9 +69,7 @@ const Board = () => {
     });
   }, []);
 
-  // `useInterval` is needed; you can't naively do `setInterval` in the
-  // `useEffect` above. See the article linked above the `useInterval`
-  // definition for details.
+
   useInterval(() => {
     moveSnake();
   }, 150);
@@ -86,11 +79,7 @@ const Board = () => {
     const isValidDirection = newDirection !== '';
     if (!isValidDirection) return;
     const snakeWillRunIntoItself =
-      getOppositeDirection(newDirection) === direction && snakeCells.size > 1;
-    // Note: this functionality is currently broken, for the same reason that
-    // `useInterval` is needed. Specifically, the `direction` and `snakeCells`
-    // will currently never reflect their "latest version" when `handleKeydown`
-    // is called. I leave it as an exercise to the viewer to fix this :P
+    getOppositeDirection(newDirection) === direction && snakeCells.size > 1;
     if (snakeWillRunIntoItself) return;
     setDirection(newDirection);
   };
@@ -101,13 +90,13 @@ const Board = () => {
       col: snake.head.value.col,
     };
 
-    const nextHeadCoords = getCoordsInDirection(currentHeadCoords, direction);
+    const nextHeadCoords = getCoordsInDirection(currentHeadCoords, direction);//it gives current co-ordinates//
     if (isOutOfBounds(nextHeadCoords, board)) {
       handleGameOver();
       return;
     }
     const nextHeadCell = board[nextHeadCoords.row][nextHeadCoords.col];
-    if (snakeCells.has(nextHeadCell)) {
+    if (snakeCells.has(nextHeadCell)) { //snake cells is a set//
       handleGameOver();
       return;
     }
@@ -172,18 +161,15 @@ const Board = () => {
     snake.tail = snakeHead;
   };
 
-  const handleFoodConsumption = newSnakeCells => {
+  const handleFoodConsumption = newSnakeCells => {  //it updates next food cell//
     const maxPossibleCellValue = BOARD_SIZE * BOARD_SIZE;
     let nextFoodCell;
-    // In practice, this will never be a time-consuming operation. Even
-    // in the extreme scenario where a snake is so big that it takes up 90%
-    // of the board (nearly impossible), there would be a 10% chance of generating
-    // a valid new food cell--so an average of 10 operations: trivial.
+
     while (true) {
       nextFoodCell = randomIntFromInterval(1, maxPossibleCellValue);
       if (newSnakeCells.has(nextFoodCell) || foodCell === nextFoodCell)
         continue;
-      break;
+      break;//generate and leave//
     }
 
     const nextFoodShouldReverseDirection =
@@ -216,7 +202,7 @@ const Board = () => {
                 foodShouldReverseDirection,
                 snakeCells,
               );
-              return <div key={cellIdx} className={className}>{cellValue}</div>;
+              return <div key={cellIdx} className={className}></div>;
             })}
           </div>
         ))}
