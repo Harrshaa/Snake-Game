@@ -63,6 +63,7 @@ const Board = () => {
     false,
   );
 
+
   useEffect(() => {
     window.addEventListener('keydown', e => {
       handleKeydown(e);
@@ -76,11 +77,16 @@ const Board = () => {
 
   const handleKeydown = e => {
     const newDirection = getDirectionFromKey(e.key);
+
     const isValidDirection = newDirection !== '';
     if (!isValidDirection) return;
+
     const snakeWillRunIntoItself =
     getOppositeDirection(newDirection) === direction && snakeCells.size > 1;
-    if (snakeWillRunIntoItself) return;
+
+    if (snakeWillRunIntoItself){
+    return;
+    }
     setDirection(newDirection);
   };
 
@@ -95,17 +101,20 @@ const Board = () => {
       handleGameOver();
       return;
     }
+
     const nextHeadCell = board[nextHeadCoords.row][nextHeadCoords.col];
+
     if (snakeCells.has(nextHeadCell)) { //snake cells is a set//
       handleGameOver();
       return;
     }
 
-    const newHead = new LinkedListNode({
+    const newHead = new LinkedListNode({ //created a node//
       row: nextHeadCoords.row,
       col: nextHeadCoords.col,
       cell: nextHeadCell,
     });
+
     const currentHead = snake.head;
     snake.head = newHead;
     currentHead.next = newHead;
@@ -122,7 +131,7 @@ const Board = () => {
       // This function mutates newSnakeCells.
       growSnake(newSnakeCells);
       if (foodShouldReverseDirection) reverseSnake();
-      handleFoodConsumption(newSnakeCells);
+      handleFoodConsumption(newSnakeCells);  //if food consumed at some random cell create a new food cell//
     }
 
     setSnakeCells(newSnakeCells);
@@ -172,8 +181,11 @@ const Board = () => {
       break;//generate and leave//
     }
 
+
+    //this is not function its just a variable if math.random<0.3 then nextfoodshouldreversdirection becomes==1//
     const nextFoodShouldReverseDirection =
       Math.random() < PROBABILITY_OF_DIRECTION_REVERSAL_FOOD;
+      // Math.random() returns a random number between 0 (inclusive),  and 1 (exclusive)://
 
     setFoodCell(nextFoodCell);
     setFoodShouldReverseDirection(nextFoodShouldReverseDirection);
@@ -193,7 +205,8 @@ const Board = () => {
     <>
       <h1>Score: {score}</h1>
       <div className="board">
-        {board.map((row, rowIdx) => (
+
+        {board.map((row,rowIdx) => (
           <div key={rowIdx} className="row">
             {row.map((cellValue, cellIdx) => {
               const className = getCellClassName(
@@ -202,10 +215,11 @@ const Board = () => {
                 foodShouldReverseDirection,
                 snakeCells,
               );
-              return <div key={cellIdx} className={className}></div>;
+              return <div key={cellIdx} className={className}>{cellValue}</div>;
             })}
           </div>
         ))}
+
       </div>
     </>
   );

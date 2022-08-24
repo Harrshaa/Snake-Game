@@ -1,6 +1,7 @@
 .App{
   text-align: center;
-  background-color: yellowgreen;
+  /* background-color: yellow; */
+  background-image:linear-gradient(to bottom, #e95a02d7, #ffffff00, #11ec24);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
