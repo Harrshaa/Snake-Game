@@ -46,6 +46,7 @@ const getStartingSnakeLLValue = board => {
     cell: startingCell,
   };
 };
+let id;
 
 const Board = () => {
   const [score, setScore] = useState(0);
@@ -62,18 +63,26 @@ const Board = () => {
   const [foodShouldReverseDirection, setFoodShouldReverseDirection] = useState(
     false,
   );
+  const[play,setPlay]= useState(false);
 
 
   useEffect(() => {
     window.addEventListener('keydown', e => {
       handleKeydown(e);
+      console.log("hello");
     });
   }, []);
 
 
-  useInterval(() => {
-    moveSnake();
-  }, 150);
+  // useInterval(() => {
+  //   moveSnake();
+  // }, 150);
+
+
+
+
+
+  
 
   const handleKeydown = e => {
     const newDirection = getDirectionFromKey(e.key);
@@ -136,6 +145,22 @@ const Board = () => {
 
     setSnakeCells(newSnakeCells);
   };
+
+
+
+  useEffect(()=>{ 
+    if(play){
+    id=setInterval(()=>{
+      moveSnake();
+    },150);
+  }
+   
+   return ()=>{
+    clearInterval(id);
+  }  
+  },[moveSnake,play]);
+
+
 
   // This function mutates newSnakeCells.
   const growSnake = newSnakeCells => {
@@ -203,6 +228,9 @@ const Board = () => {
 
   return (
     <>
+      <button className='pauseButton' onClick={()=>{setPlay(!play)}}>
+      {play ? 'PAUSE' : 'PLAY'}
+      </button> 
       <h1>Score: {score}</h1>
       <div className="board">
 
@@ -215,7 +243,7 @@ const Board = () => {
                 foodShouldReverseDirection,
                 snakeCells,
               );
-              return <div key={cellIdx} className={className}>{cellValue}</div>;
+              return <div key={cellIdx} className={className}></div>;
             })}
           </div>
         ))}
